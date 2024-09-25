@@ -1,0 +1,26 @@
+.hero {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: url("https://images5.alphacoders.com/336/336625.jpg") center/cover;
+  padding: 100px 50px;
+  margin-top: 80px;
+}
+
+.hero-wrapper {
+  max-width: 100vw;
+  text-align: left;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.hero-description {
+  max-width: 500px;
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  line-height: 1.2;
+}

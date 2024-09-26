@@ -1,6 +1,6 @@
 import styles from "./header.module.css";
 
-const Header: React.FC = (): React.ReactNode => {
+function Header() {
   return (
     <header className={styles.header}>
       <div className={styles["header-wrapper"]}>
@@ -23,6 +23,6 @@ const Header: React.FC = (): React.ReactNode => {
       </div>
     </header>
   );
-};
-Header.displayName = "Header";
+}
+
 export default Header;

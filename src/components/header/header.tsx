@@ -1,22 +1,27 @@
 import styles from "./header.module.css";
+import { Link, NavLink, NavLinkRenderProps } from "react-router-dom";
 
 function Header() {
+  function navIsActive({ isActive }: NavLinkRenderProps) {
+    return isActive ? styles["active-nav-item"] : styles["nav-item"];
+  }
   return (
     <header className={styles.header}>
       <div className={styles["header-wrapper"]}>
-        <h1 className={styles["header-title"]}>
-          <a href="/">Countries App</a>
-        </h1>
+        <Link to="/">
+          <h1 className={styles["header-title"]}>Countries App</h1>
+        </Link>
         <nav className={styles["header-nav"]}>
           <ul>
             <li>
-              <a href="/">Home</a>
+              <NavLink className={navIsActive} to="/countries">
+                <span>Countries</span>
+              </NavLink>
             </li>
             <li>
-              <a href="/countries">Countries</a>
-            </li>
-            <li>
-              <a href="/about">About</a>
+              <NavLink className={navIsActive} to="/about">
+                <span>About</span>
+              </NavLink>
             </li>
           </ul>
         </nav>

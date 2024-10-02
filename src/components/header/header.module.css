@@ -1,3 +1,6 @@
+a {
+  text-decoration: none;
+}
 .header {
   position: fixed;
   top: 0;
@@ -17,8 +20,7 @@
   padding: 20px 50px;
 }
 
-.header-title a {
-  text-decoration: none;
+.header-title {
   color: #333;
 }
 
@@ -27,10 +29,13 @@
   display: flex;
   gap: 20px;
 }
-
-.header-nav ul li a {
-  text-decoration: none;
+.nav-item {
+  font-weight: bold;
   color: #333;
+}
+.active-nav-item {
+  font-weight: bold;
+  color: #aa2121;
 }
 
 .header-nav ul li a:hover {

@@ -1,0 +1,15 @@
+.countries-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.countries-block {
+  color: #333;
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+}
+.countries-block h2 {
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+}

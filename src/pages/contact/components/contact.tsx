@@ -1,28 +1,23 @@
 import styles from "./contact.module.css";
 
 const ContactComp: React.FC = () => {
-  const logData = (form: HTMLFormElement) => {
-    const formData = new FormData(form);
-    formData.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const logData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    logData(e.currentTarget);
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    console.log(data);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      logData(e.currentTarget);
+      logData(e);
     }
   };
 
   return (
     <section className={styles["content-section"]}>
-      <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+      <form onSubmit={logData} onKeyDown={handleKeyDown}>
         <div className="nameInput">
           <label>Name:</label>
           <input type="text" name="name" id="name" />

@@ -1,6 +1,6 @@
 import styles from "./contact.module.css";
 
-const Contact: React.FC = () => {
+const ContactComp: React.FC = () => {
   const logData = (form: HTMLFormElement) => {
     const formData = new FormData(form);
     formData.forEach((value, key) => {
@@ -44,4 +44,4 @@ const Contact: React.FC = () => {
     </section>
   );
 };
-export default Contact;
+export default ContactComp;

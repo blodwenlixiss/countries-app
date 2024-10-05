@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DefaultLayout from "./components/layout/default/defaultLayout";
 import About from "./pages/about/view";
-import Countries from "./pages/contact/view";
+import Contact from "./pages/contact/view";
 import { lazy, Suspense } from "react";
 
 const HomePage = lazy(() => import("./pages/home/view/initalPage/index"));
@@ -30,7 +30,7 @@ function App() {
             }
           />
           <Route path="/about" element={<About />} />
-          <Route path="/countries" element={<Countries />} />
+          <Route path="/contact" element={<Contact />} />
         </Route>
       </Routes>
     </BrowserRouter>

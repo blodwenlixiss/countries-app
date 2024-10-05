@@ -1,7 +1,7 @@
-import Contact from "../components/contact";
+import ContactComp from "../components/contact";
 
-const Country = () => {
-  return <Contact />;
+const Contact = () => {
+  return <ContactComp />;
 };
 
-export default Country;
+export default Contact;

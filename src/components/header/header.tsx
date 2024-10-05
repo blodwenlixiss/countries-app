@@ -14,7 +14,7 @@ function Header() {
         <nav className={styles["header-nav"]}>
           <ul>
             <li>
-              <NavLink className={navIsActive} to="/countries">
+              <NavLink className={navIsActive} to="/contact">
                 <span>Contact</span>
               </NavLink>
             </li>

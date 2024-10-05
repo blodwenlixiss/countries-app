@@ -15,7 +15,7 @@ function Header() {
           <ul>
             <li>
               <NavLink className={navIsActive} to="/countries">
-                <span>Countries</span>
+                <span>Contact</span>
               </NavLink>
             </li>
             <li>

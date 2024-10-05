@@ -8,6 +8,8 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   max-width: 1820px;
   margin: 0 auto;
+  position: relative;
+  height: 100vh;
 }
 
 h6 span {

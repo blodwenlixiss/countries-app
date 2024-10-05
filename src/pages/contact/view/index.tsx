@@ -1,7 +1,7 @@
-import Countries from "../components/countries";
+import Contact from "../components/contact";
 
 const Country = () => {
-  return <Countries />;
+  return <Contact />;
 };
 
 export default Country;

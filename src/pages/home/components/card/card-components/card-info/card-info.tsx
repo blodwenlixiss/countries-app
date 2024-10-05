@@ -6,9 +6,9 @@ const CardInfo: React.FC<{
 }> = ({ countryTitle, population }) => {
   return (
     <article className={styles["card-info"]}>
-      <h2>Country: {countryTitle}</h2>
+      <h2>Country:{countryTitle}</h2>
       <h6>
-        Population: <span>{population}</span>
+        Population: <span> {population}</span>
       </h6>
     </article>
   );

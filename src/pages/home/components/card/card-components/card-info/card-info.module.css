@@ -1,4 +1,5 @@
 .card-info h2 {
+  max-width: 30px;
   font-size: 1.1rem;
   margin-bottom: 15px;
 }

@@ -1,15 +1,54 @@
-.card-button {
+.button-container {
   position: absolute;
   top: 10px;
   right: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.card-button {
+  position: relative;
   background-color: #cacacafa;
-  width: 20%;
   border-radius: 50%;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+  text-align: center;
   color: #000000;
   border: none;
-  padding: 5px;
+  padding: 15px;
   cursor: pointer;
+}
+.btnSpan {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -35%);
+  width: 100%;
+  height: 100%;
+}
+.like-button-container {
+  position: absolute;
+  top: 10px;
+}
+
+.likeBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -35%);
+  width: 100%;
+  height: 100%;
+  color: crimson;
+  cursor: pointer;
+  font-size: 24px;
+  background: none;
+  border: none;
+}
+.likeBtn:hover {
+  color: #ab1c1c;
 }
 
 .card-button:hover {

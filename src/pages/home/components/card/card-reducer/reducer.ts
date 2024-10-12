@@ -96,7 +96,6 @@ export const articleReducer = (
       (article) => article.id !== action.payload.id
     );
     if (index !== undefined && articleToMove) {
-      // Insert the recovered article at the correct index
       restoreArticle.splice(index, 0, {
         ...articleToMove,
         isDeleted: false,

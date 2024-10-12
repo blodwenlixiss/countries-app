@@ -5,13 +5,15 @@ export const country = [
     flag: "https://www.countryflags.com/wp-content/uploads/georgia-flag-jpg-xl.jpg",
     id: "1",
     like: 0,
+    isDeleted: false,
   },
   {
     title: "United Kingdom",
     population: "68,278,000",
-    flag: "https://cdn.britannica.com/25/4825-050-977D8C5E/Flag-United-Kingdom.jpg  ",
+    flag: "https://cdn.britannica.com/25/4825-050-977D8C5E/Flag-United-Kingdom.jpg",
     id: "2",
     like: 0,
+    isDeleted: false,
   },
   {
     title: "Korea",
@@ -19,5 +21,6 @@ export const country = [
     flag: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/1280px-Flag_of_South_Korea.svg.png",
     id: "3",
     like: 0,
+    isDeleted: false,
   },
 ];

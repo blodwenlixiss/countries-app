@@ -5,8 +5,10 @@
   padding: 10px;
   position: relative;
 }
-.selection select {
-  margin-bottom: 10px;
+.isDeleted {
+  background-color: rgba(243, 165, 165, 0.91);
   border-radius: 10px;
-  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.126);
+  padding: 10px;
+  position: relative;
 }

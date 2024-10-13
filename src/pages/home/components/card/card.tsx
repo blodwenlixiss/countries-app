@@ -11,7 +11,10 @@ import { articleReducer } from "./card-reducer/reducer";
 import { CardDelete } from "./card-components/card-button/deletebtn/cardDelete";
 
 const Card: React.FC = () => {
-  const [cardArticle, dispatch] = useReducer(articleReducer, country);
+  const [state, dispatch] = useReducer(articleReducer, {
+    sortDirection: null,
+    cardArticle: [...country],
+  });
 
   const handleLikeCount = (id: string) => {
     return dispatch({ type: "likes", payload: { id } });
@@ -27,6 +30,7 @@ const Card: React.FC = () => {
     e.preventDefault();
     const newArticleObj = e.currentTarget;
     dispatch({ type: "create", payload: { newArticleObj } });
+    newArticleObj.reset();
   };
 
   const handleDeleteArticle = (
@@ -44,7 +48,7 @@ const Card: React.FC = () => {
     <div className={styles["card-container"]}>
       <CardSort onSort={handleSort} />
       <div style={{ display: "flex", gap: " 40px", lineHeight: "1rem" }}>
-        {cardArticle.map((artcile) => (
+        {state.cardArticle.map((artcile) => (
           <div
             key={artcile.id}
             className={`${!artcile.isDeleted ? styles.card : styles.isDeleted}`}

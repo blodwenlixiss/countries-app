@@ -3,5 +3,6 @@
   justify-content: space-around;
   align-items: center;
   background: url("https://images5.alphacoders.com/336/336625.jpg") center/cover;
-  padding: 200px 50px 0;
+  height: 100vh;
+  padding: 100px 50px 0;
 }

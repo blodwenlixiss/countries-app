@@ -6,7 +6,7 @@ import CardFlag from "./card-components/card-image";
 import CardSort from "./card-components/card-sort/cardSort";
 import CardCreate from "./card-components/card-create/cardCreate";
 import { country } from "../static/country-data";
-import { FormEvent, useReducer } from "react";
+import { useReducer } from "react";
 import { articleReducer } from "./card-reducer/reducer";
 import { CardDelete } from "./card-components/card-button/deletebtn/cardDelete";
 
@@ -26,11 +26,11 @@ const Card: React.FC = () => {
     dispatch({ type: "sort", payload: { selectedValue } });
   };
 
-  const handleCreateArticle = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const newArticleObj = e.currentTarget;
+  const handleCreateArticle = (newArticleObj: {
+    title: string;
+    population: string;
+  }) => {
     dispatch({ type: "create", payload: { newArticleObj } });
-    newArticleObj.reset();
   };
 
   const handleDeleteArticle = (

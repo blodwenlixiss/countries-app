@@ -62,23 +62,26 @@ export const articleReducer = (
     }
 
     case "create": {
-      const newArticle: any = {};
-      const formData = new FormData(action.payload.newArticleObj);
-      for (const [key, value] of formData) {
-        newArticle[key] = value;
-      }
+      const articleCopy = [...state.cardArticle];
+      const deletedCardArticle = articleCopy.filter(
+        (article) => article.isDeleted === true
+      );
+      const currentCardArticle = articleCopy.filter(
+        (article) => article.isDeleted === false
+      );
 
       return {
         ...state,
         cardArticle: [
-          ...state.cardArticle,
+          ...currentCardArticle,
           {
-            ...newArticle,
+            ...action.payload.newArticleObj,
             flag: "rame",
             id: (Number(state.cardArticle.at(-1)?.id) + 1).toString(),
             like: 0,
             isDeleted: false,
           },
+          ...deletedCardArticle,
         ],
       };
     }

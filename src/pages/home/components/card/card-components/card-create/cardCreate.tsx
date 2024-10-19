@@ -43,6 +43,8 @@ const CardCreate: React.FC<{
       }}
       onSubmit={handleCreateCard}
     >
+      {" "}
+      <progress className="progress" value={0.2} />
       <input
         onChange={handleTitleChange}
         value={title}
@@ -64,7 +66,6 @@ const CardCreate: React.FC<{
           {titleErrorMsg}
         </span>
       )}
-
       <input
         value={population}
         onChange={handlePopulationChange}

@@ -40,6 +40,7 @@ const Card: React.FC = () => {
   const handleCreateArticle = (newArticleObj: {
     title: string;
     population: string;
+    image: any;
   }) => {
     dispatch({ type: "create", payload: { newArticleObj } });
   };

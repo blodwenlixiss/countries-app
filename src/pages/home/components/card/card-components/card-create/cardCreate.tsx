@@ -3,19 +3,38 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const CardCreate: React.FC<{
-  onCreate(newArticleObj: { title: string; population: string }): void;
+  onCreate(newArticleObj: {
+    title: string;
+    population: string;
+    flag: any;
+  }): void;
 }> = ({ onCreate }) => {
   const [populationErrorMsg, setPopulationErrorMsg] = useState("");
   const [titleErrorMsg, setTitleErrorMsg] = useState("");
   const [title, setTitle] = useState("");
   const [population, setPopulation] = useState("");
+  const [flag, setFlag] = useState();
   const params = useParams();
   const lang = params.lang as string;
   const t = getTranslation(lang);
+
   const handleCreateCard = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onCreate({ title, population });
+    onCreate({ title, population, flag });
   };
+  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const data = new FileReader();
+    console.log(data);
+    data.addEventListener("load", () => {
+      if (data.result) {
+        setFlag(data.result);
+      }
+    });
+    if (e.target.files) {
+      data.readAsDataURL(e.target.files[0]);
+    }
+  };
+
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value.length > 9) {
@@ -25,6 +44,7 @@ const CardCreate: React.FC<{
     }
     setTitle(value);
   };
+
   const handlePopulationChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value.length > 9) {
@@ -47,7 +67,6 @@ const CardCreate: React.FC<{
       }}
       onSubmit={handleCreateCard}
     >
-      {" "}
       <progress className="progress" value={0.2} />
       <input
         onChange={handleTitleChange}
@@ -91,6 +110,14 @@ const CardCreate: React.FC<{
           {populationErrorMsg}
         </span>
       )}
+      <label>{t("contactImage")}</label>
+      <input
+        type="file"
+        name="image"
+        id="image"
+        onChange={handleImageUpload}
+        accept=".jpg, .png"
+      />
       <button type="submit">{t("create")}</button>
     </form>
   );

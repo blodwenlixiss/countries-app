@@ -81,9 +81,9 @@ export const articleReducer = (
           ...currentCardArticle,
           {
             ...action.payload.newArticleObj,
-            flag: "rame",
             id: (Number(state.cardArticle.at(-1)?.id) + 1).toString(),
             like: 0,
+
             isDeleted: false,
           },
           ...deletedCardArticle,

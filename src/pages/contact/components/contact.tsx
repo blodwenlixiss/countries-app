@@ -39,8 +39,6 @@ const ContactComp: React.FC = () => {
           <label>{t("contactMessage")}</label>
           <textarea name="message" id="message"></textarea>
         </div>
-        <label>{t("contactImage")}</label>
-        <input type="file" name="image" id="image" accept=".jpg, .png" />
         <button type="submit">{t("contactSend")}</button>
       </form>
     </section>

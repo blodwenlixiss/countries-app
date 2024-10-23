@@ -6,18 +6,29 @@ import CardFlag from "./card-components/card-image";
 import CardSort from "./card-components/card-sort/cardSort";
 import CardCreate from "./card-components/card-create/cardCreate";
 import { country } from "../static/country-data";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { articleReducer } from "./card-reducer/reducer";
 import { CardDelete } from "./card-components/card-button/deletebtn/cardDelete";
+import { useParams } from "react-router-dom";
 
 const Card: React.FC = () => {
+  const params = useParams();
+  const lang = params.lang as keyof typeof country;
+
   const [state, dispatch] = useReducer(articleReducer, {
     sortDirection: null,
-    cardArticle: [...country],
+    cardArticle: [...country[lang]],
   });
 
+  useEffect(() => {
+    dispatch({
+      type: "setArticles",
+      payload: { articles: [...country[lang]] },
+    });
+  }, [lang]);
+
   const handleLikeCount = (id: string) => {
-    return dispatch({ type: "likes", payload: { id } });
+    dispatch({ type: "likes", payload: { id } });
   };
 
   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {

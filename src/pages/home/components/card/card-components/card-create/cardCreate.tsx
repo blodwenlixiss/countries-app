@@ -1,4 +1,6 @@
+import { getTranslation } from "@/components/utilities/util";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const CardCreate: React.FC<{
   onCreate(newArticleObj: { title: string; population: string }): void;
@@ -7,7 +9,9 @@ const CardCreate: React.FC<{
   const [titleErrorMsg, setTitleErrorMsg] = useState("");
   const [title, setTitle] = useState("");
   const [population, setPopulation] = useState("");
-
+  const params = useParams();
+  const lang = params.lang as string;
+  const t = getTranslation(lang);
   const handleCreateCard = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onCreate({ title, population });
@@ -49,7 +53,7 @@ const CardCreate: React.FC<{
         onChange={handleTitleChange}
         value={title}
         name="title"
-        placeholder="title"
+        placeholder={`${t("createTitle")}`}
         type="text"
       />
       {titleErrorMsg && (
@@ -70,7 +74,7 @@ const CardCreate: React.FC<{
         value={population}
         onChange={handlePopulationChange}
         name="population"
-        placeholder="population"
+        placeholder={`${t("createPopulation")}`}
         type="number"
       />
       {populationErrorMsg && (
@@ -87,7 +91,7 @@ const CardCreate: React.FC<{
           {populationErrorMsg}
         </span>
       )}
-      <button type="submit">Create</button>
+      <button type="submit">{t("create")}</button>
     </form>
   );
 };

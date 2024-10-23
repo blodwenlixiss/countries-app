@@ -1,19 +1,18 @@
-import { useState } from "react";
+import { getTranslation, locale } from "../utilities/util";
 import styles from "./header.module.css";
-import { NavLink, NavLinkRenderProps, useNavigate } from "react-router-dom";
+import { NavLink, Link, useLocation, useParams } from "react-router-dom";
 
 function Header() {
-  function navIsActive({ isActive }: NavLinkRenderProps) {
-    return isActive ? styles["active-nav-item"] : styles["nav-item"];
-  }
-  const [langChange, setLangChange] = useState(false);
-  const navigate = useNavigate();
+  const location = useLocation();
+  const params = useParams();
+  const lang = params.lang as string;
+  const t = getTranslation(lang);
 
-  function handleLangChange() {
-    setLangChange((state) => !state);
-    const route = langChange ? "en" : "ka";
-    navigate(`../${route}/`);
-  }
+  const navItmes = [
+    { name: `${t("home")}`, path: `/${lang}` },
+    { name: `${t("about")}`, path: "about" },
+    { name: `${t("contact")}`, path: "contact" },
+  ];
 
   return (
     <header className={styles.header}>
@@ -23,26 +22,18 @@ function Header() {
         </NavLink>
         <nav className={styles["header-nav"]}>
           <ul>
-            <li>
-              <NavLink className={navIsActive} to="countries">
-                <span>Home</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={navIsActive} to="contact">
-                <span>Contact</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={navIsActive} to="about">
-                <span>About</span>
-              </NavLink>
-            </li>
-            <li>
-              <button onClick={handleLangChange}>
-                {langChange ? "ka" : "en"}
-              </button>
-            </li>
+            {navItmes.map((item) => (
+              <li key={item.name}>
+                <NavLink to={item.path}>{item.name}</NavLink>
+              </li>
+            ))}
+            {locale.map((local) => (
+              <li key={local} className={styles["nav-item"]}>
+                <Link to={`/${local}${location.pathname.slice(3)}`}>
+                  {local}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>

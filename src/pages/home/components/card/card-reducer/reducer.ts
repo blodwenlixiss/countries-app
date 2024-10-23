@@ -19,6 +19,11 @@ export const articleReducer = (
   action: ActionType
 ) => {
   switch (action.type) {
+    case "setArticles":
+      return {
+        ...state,
+        cardArticle: action.payload.articles,
+      };
     case "likes":
       return {
         ...state,

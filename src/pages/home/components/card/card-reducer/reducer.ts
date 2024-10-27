@@ -16,16 +16,21 @@ const deletedItemIndex: { [key: string]: number } = {};
 let index: number = 0;
 export const articleReducer = (
   state: { sortDirection: string | null; cardArticle: CardArticleType },
-  action: ActionType
+  action: ActionType,
 ) => {
   switch (action.type) {
+    case "setArticles":
+      return {
+        ...state,
+        cardArticle: action.payload.articles,
+      };
     case "likes":
       return {
         ...state,
         cardArticle: state.cardArticle.map((article) =>
           article.id === action.payload.id
             ? { ...article, like: article.like + 1 }
-            : article
+            : article,
         ),
       };
 
@@ -33,10 +38,10 @@ export const articleReducer = (
       const sortDirection = action.payload.selectedValue;
       const articleCopy = [...state.cardArticle];
       const deletedCardArticle = articleCopy.filter(
-        (article) => article.isDeleted === true
+        (article) => article.isDeleted === true,
       );
       const currentCardArticle = articleCopy.filter(
-        (article) => article.isDeleted === false
+        (article) => article.isDeleted === false,
       );
 
       let sortedArticles;
@@ -64,10 +69,10 @@ export const articleReducer = (
     case "create": {
       const articleCopy = [...state.cardArticle];
       const deletedCardArticle = articleCopy.filter(
-        (article) => article.isDeleted === true
+        (article) => article.isDeleted === true,
       );
       const currentCardArticle = articleCopy.filter(
-        (article) => article.isDeleted === false
+        (article) => article.isDeleted === false,
       );
 
       return {
@@ -76,9 +81,9 @@ export const articleReducer = (
           ...currentCardArticle,
           {
             ...action.payload.newArticleObj,
-            flag: "rame",
             id: (Number(state.cardArticle.at(-1)?.id) + 1).toString(),
             like: 0,
+
             isDeleted: false,
           },
           ...deletedCardArticle,
@@ -88,7 +93,7 @@ export const articleReducer = (
 
     case "delete": {
       const deletedCardArticle = state.cardArticle.find(
-        (article) => article.id === action.payload.id
+        (article) => article.id === action.payload.id,
       );
 
       if (deletedCardArticle) {
@@ -97,7 +102,7 @@ export const articleReducer = (
       }
 
       const updatedArticles = state.cardArticle.filter(
-        (article) => article.id !== action.payload.id
+        (article) => article.id !== action.payload.id,
       );
 
       return {
@@ -111,7 +116,7 @@ export const articleReducer = (
 
     case "recover": {
       const articleToMove = state.cardArticle.find(
-        (article) => article.id === action.payload.id
+        (article) => article.id === action.payload.id,
       );
 
       for (const [key] of Object.entries(deletedItemIndex)) {
@@ -122,7 +127,7 @@ export const articleReducer = (
       }
 
       const updatedArticles = state.cardArticle.filter(
-        (article) => article.id !== action.payload.id
+        (article) => article.id !== action.payload.id,
       );
 
       if (index !== undefined && articleToMove) {

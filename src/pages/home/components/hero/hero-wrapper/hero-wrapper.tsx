@@ -1,15 +1,15 @@
+import { useParams } from "react-router-dom";
 import styles from "./hero-wrapper.module.css";
+import { getTranslation } from "@/components/utilities/util";
 
 const HeroWrapper: React.FC = () => {
+  const params = useParams();
+  const lang = params.lang as string;
+  const t = getTranslation(lang);
   return (
     <div className={styles["hero-wrapper"]}>
-      <h1 className={styles["hero-title"]}>Countries App</h1>
-      <p className={styles["hero-description"]}>
-        Discover fascinating information about countries worldwide, including
-        their geography, demographics, and cultural heritage. Our app provides
-        an interactive platform to explore and learn about diverse nations
-        across the globe.
-      </p>
+      <h1 className={styles["hero-title"]}>{t("heroTitle")}</h1>
+      <p className={styles["hero-description"]}>{t("heroTitleDescription")}</p>
     </div>
   );
 };

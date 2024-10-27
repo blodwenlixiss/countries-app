@@ -1,4 +1,6 @@
+import { useParams } from "react-router-dom";
 import styles from "./contact.module.css";
+import { getTranslation } from "@/components/utilities/util";
 
 const ContactComp: React.FC = () => {
   const logData = (e: React.FormEvent<HTMLFormElement>) => {
@@ -14,16 +16,19 @@ const ContactComp: React.FC = () => {
       logData(e);
     }
   };
+  const param = useParams();
+  const lang = param.lang as string;
+  const t = getTranslation(lang);
 
   return (
     <section className={styles["content-section"]}>
       <form onSubmit={logData} onKeyDown={handleKeyDown}>
         <div className="nameInput">
-          <label>Name:</label>
+          <label>{t("contactName")}</label>
           <input type="text" name="name" id="name" />
         </div>
         <div className="lastNameInput">
-          <label>Last Name:</label>
+          <label>{t("contactSurname")}</label>
           <input type="text" name="lastName" id="lastName" />
         </div>
         <div className="emailInput">
@@ -31,10 +36,10 @@ const ContactComp: React.FC = () => {
           <input type="email" name="email" id="email" />
         </div>
         <div className="messageInput  ">
-          <label>Message:</label>
+          <label>{t("contactMessage")}</label>
           <textarea name="message" id="message"></textarea>
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit">{t("contactSend")}</button>
       </form>
     </section>
   );

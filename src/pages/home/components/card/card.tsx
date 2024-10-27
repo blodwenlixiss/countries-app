@@ -6,18 +6,29 @@ import CardFlag from "./card-components/card-image";
 import CardSort from "./card-components/card-sort/cardSort";
 import CardCreate from "./card-components/card-create/cardCreate";
 import { country } from "../static/country-data";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { articleReducer } from "./card-reducer/reducer";
 import { CardDelete } from "./card-components/card-button/deletebtn/cardDelete";
+import { useParams } from "react-router-dom";
 
 const Card: React.FC = () => {
+  const params = useParams();
+  const lang = params.lang as keyof typeof country;
+
   const [state, dispatch] = useReducer(articleReducer, {
     sortDirection: null,
-    cardArticle: [...country],
+    cardArticle: [...country[lang]],
   });
 
+  useEffect(() => {
+    dispatch({
+      type: "setArticles",
+      payload: { articles: [...country[lang]] },
+    });
+  }, [lang]);
+
   const handleLikeCount = (id: string) => {
-    return dispatch({ type: "likes", payload: { id } });
+    dispatch({ type: "likes", payload: { id } });
   };
 
   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -29,13 +40,14 @@ const Card: React.FC = () => {
   const handleCreateArticle = (newArticleObj: {
     title: string;
     population: string;
+    flag: string; // Changed from 'image' to 'flag'
   }) => {
     dispatch({ type: "create", payload: { newArticleObj } });
   };
 
   const handleDeleteArticle = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    id: string
+    id: string,
   ) => {
     e.preventDefault();
     dispatch({ type: "delete", payload: { id } });
@@ -48,41 +60,52 @@ const Card: React.FC = () => {
     <div className={styles["card-container"]}>
       <CardSort onSort={handleSort} />
       <div style={{ display: "flex", gap: " 40px", lineHeight: "1rem" }}>
-        {state.cardArticle.map((artcile) => (
-          <div
-            key={artcile.id}
-            className={`${!artcile.isDeleted ? styles.card : styles.isDeleted}`}
-          >
-            <CardContent
-              renderButton={
-                <CardButton
-                  onChange={() => handleLikeCount(artcile.id)}
-                  id={artcile.id}
-                />
-              }
+        {state.cardArticle.map(
+          (artcile: {
+            id: string;
+            isDeleted: boolean;
+            like: number;
+            title: string;
+            population: string;
+            flag: string;
+          }) => (
+            <div
+              key={artcile.id}
+              className={`${
+                !artcile.isDeleted ? styles.card : styles.isDeleted
+              }`}
             >
-              <CardInfo
-                likeCount={artcile.like}
-                countryTitle={artcile.title}
-                population={artcile.population}
-              />
-              <CardFlag flagSrc={artcile.flag} />
-              {!artcile.isDeleted ? (
-                <CardDelete
-                  isDelete={false}
-                  onRecover={() => handleRecoverArticle(artcile.id)}
-                  onDelete={(e) => handleDeleteArticle(e, artcile.id)}
+              <CardContent
+                renderButton={
+                  <CardButton
+                    onChange={() => handleLikeCount(artcile.id)}
+                    id={artcile.id}
+                  />
+                }
+              >
+                <CardInfo
+                  likeCount={artcile.like}
+                  countryTitle={artcile.title}
+                  population={artcile.population}
                 />
-              ) : (
-                <CardDelete
-                  isDelete={true}
-                  onRecover={() => handleRecoverArticle(artcile.id)}
-                  onDelete={(e) => handleDeleteArticle(e, artcile.id)}
-                />
-              )}
-            </CardContent>
-          </div>
-        ))}
+                <CardFlag flagSrc={artcile.flag} />
+                {!artcile.isDeleted ? (
+                  <CardDelete
+                    isDelete={false}
+                    onRecover={() => handleRecoverArticle(artcile.id)}
+                    onDelete={(e) => handleDeleteArticle(e, artcile.id)}
+                  />
+                ) : (
+                  <CardDelete
+                    isDelete={true}
+                    onRecover={() => handleRecoverArticle(artcile.id)}
+                    onDelete={(e) => handleDeleteArticle(e, artcile.id)}
+                  />
+                )}
+              </CardContent>
+            </div>
+          ),
+        )}
       </div>
       <CardCreate onCreate={handleCreateArticle} />
     </div>

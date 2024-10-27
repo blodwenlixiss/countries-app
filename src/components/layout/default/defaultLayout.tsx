@@ -1,6 +1,3 @@
-
-import { Outlet } from "react-router-dom";
-
 const DefaultLayout: React.FC = () => {
   return <></>;
 };

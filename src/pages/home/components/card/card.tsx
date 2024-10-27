@@ -40,14 +40,14 @@ const Card: React.FC = () => {
   const handleCreateArticle = (newArticleObj: {
     title: string;
     population: string;
-    image: any;
+    flag: string; // Changed from 'image' to 'flag'
   }) => {
     dispatch({ type: "create", payload: { newArticleObj } });
   };
 
   const handleDeleteArticle = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    id: string
+    id: string,
   ) => {
     e.preventDefault();
     dispatch({ type: "delete", payload: { id } });
@@ -60,41 +60,52 @@ const Card: React.FC = () => {
     <div className={styles["card-container"]}>
       <CardSort onSort={handleSort} />
       <div style={{ display: "flex", gap: " 40px", lineHeight: "1rem" }}>
-        {state.cardArticle.map((artcile) => (
-          <div
-            key={artcile.id}
-            className={`${!artcile.isDeleted ? styles.card : styles.isDeleted}`}
-          >
-            <CardContent
-              renderButton={
-                <CardButton
-                  onChange={() => handleLikeCount(artcile.id)}
-                  id={artcile.id}
-                />
-              }
+        {state.cardArticle.map(
+          (artcile: {
+            id: string;
+            isDeleted: boolean;
+            like: number;
+            title: string;
+            population: string;
+            flag: string;
+          }) => (
+            <div
+              key={artcile.id}
+              className={`${
+                !artcile.isDeleted ? styles.card : styles.isDeleted
+              }`}
             >
-              <CardInfo
-                likeCount={artcile.like}
-                countryTitle={artcile.title}
-                population={artcile.population}
-              />
-              <CardFlag flagSrc={artcile.flag} />
-              {!artcile.isDeleted ? (
-                <CardDelete
-                  isDelete={false}
-                  onRecover={() => handleRecoverArticle(artcile.id)}
-                  onDelete={(e) => handleDeleteArticle(e, artcile.id)}
+              <CardContent
+                renderButton={
+                  <CardButton
+                    onChange={() => handleLikeCount(artcile.id)}
+                    id={artcile.id}
+                  />
+                }
+              >
+                <CardInfo
+                  likeCount={artcile.like}
+                  countryTitle={artcile.title}
+                  population={artcile.population}
                 />
-              ) : (
-                <CardDelete
-                  isDelete={true}
-                  onRecover={() => handleRecoverArticle(artcile.id)}
-                  onDelete={(e) => handleDeleteArticle(e, artcile.id)}
-                />
-              )}
-            </CardContent>
-          </div>
-        ))}
+                <CardFlag flagSrc={artcile.flag} />
+                {!artcile.isDeleted ? (
+                  <CardDelete
+                    isDelete={false}
+                    onRecover={() => handleRecoverArticle(artcile.id)}
+                    onDelete={(e) => handleDeleteArticle(e, artcile.id)}
+                  />
+                ) : (
+                  <CardDelete
+                    isDelete={true}
+                    onRecover={() => handleRecoverArticle(artcile.id)}
+                    onDelete={(e) => handleDeleteArticle(e, artcile.id)}
+                  />
+                )}
+              </CardContent>
+            </div>
+          ),
+        )}
       </div>
       <CardCreate onCreate={handleCreateArticle} />
     </div>

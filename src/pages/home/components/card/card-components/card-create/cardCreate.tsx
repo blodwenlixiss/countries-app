@@ -6,14 +6,14 @@ const CardCreate: React.FC<{
   onCreate(newArticleObj: {
     title: string;
     population: string;
-    flag: any;
+    flag: string;
   }): void;
 }> = ({ onCreate }) => {
   const [populationErrorMsg, setPopulationErrorMsg] = useState("");
   const [titleErrorMsg, setTitleErrorMsg] = useState("");
   const [title, setTitle] = useState("");
   const [population, setPopulation] = useState("");
-  const [flag, setFlag] = useState();
+  const [flag, setFlag] = useState("");
   const params = useParams();
   const lang = params.lang as string;
   const t = getTranslation(lang);
@@ -27,7 +27,7 @@ const CardCreate: React.FC<{
     console.log(data);
     data.addEventListener("load", () => {
       if (data.result) {
-        setFlag(data.result);
+        setFlag(data.result as string);
       }
     });
     if (e.target.files) {

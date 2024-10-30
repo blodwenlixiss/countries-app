@@ -5,19 +5,42 @@ type CardArticleType = {
   id: string;
   like: number;
   isDeleted: boolean;
-}[];
-
-type ActionType = {
-  type: string;
-  payload: any;
 };
 
+type StateType = {
+  sortDirection: string | null;
+  cardArticle: CardArticleType[];
+};
+
+type SetArticlesAction = {
+  type: "setArticles";
+  payload: { articles: CardArticleType[] };
+};
+type LikeArticleAction = { type: "likes"; payload: { id: string } };
+type SortAction = { type: "sort"; payload: { selectedValue: string } };
+type CreateArticleAction = {
+  type: "create";
+  payload: { newArticleObj: CardArticleType };
+};
+type DeleteArticleAction = { type: "delete"; payload: { id: string } };
+type RecoverArticleAction = { type: "recover"; payload: { id: string } };
+
+type ActionType =
+  | SetArticlesAction
+  | LikeArticleAction
+  | SortAction
+  | CreateArticleAction
+  | DeleteArticleAction
+  | RecoverArticleAction;
+
 const deletedItemIndex: { [key: string]: number } = {};
+
 let index: number = 0;
+
 export const articleReducer = (
-  state: { sortDirection: string | null; cardArticle: CardArticleType },
+  state: StateType,
   action: ActionType,
-) => {
+): StateType => {
   switch (action.type) {
     case "setArticles":
       return {
@@ -109,7 +132,7 @@ export const articleReducer = (
         ...state,
         cardArticle: [
           ...updatedArticles,
-          { ...deletedCardArticle, isDeleted: true },
+          { ...deletedCardArticle, isDeleted: true } as CardArticleType,
         ],
       };
     }

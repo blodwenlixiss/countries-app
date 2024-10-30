@@ -14,11 +14,11 @@ import { useParams } from "react-router-dom";
 const Card: React.FC = () => {
   const params = useParams();
   const lang = params.lang as keyof typeof country;
-
-  const [state, dispatch] = useReducer(articleReducer, {
+  const initialState = {
     sortDirection: null,
     cardArticle: [...country[lang]],
-  });
+  };
+  const [state, dispatch] = useReducer(articleReducer, initialState);
 
   useEffect(() => {
     dispatch({
@@ -40,7 +40,10 @@ const Card: React.FC = () => {
   const handleCreateArticle = (newArticleObj: {
     title: string;
     population: string;
-    flag: string; // Changed from 'image' to 'flag'
+    flag: string;
+    id: string;
+    like: number;
+    isDeleted: boolean;
   }) => {
     dispatch({ type: "create", payload: { newArticleObj } });
   };

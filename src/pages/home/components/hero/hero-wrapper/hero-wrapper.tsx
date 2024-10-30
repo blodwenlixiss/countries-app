@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import styles from "./hero-wrapper.module.css";
 import { getTranslation } from "@/components/utilities/util";
-import { OTP } from "../otp";
+import { OTP } from "../../otp";
 
 const HeroWrapper: React.FC = () => {
   const params = useParams();

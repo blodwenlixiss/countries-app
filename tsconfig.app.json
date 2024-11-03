@@ -26,5 +26,5 @@
       "comp/*": ["./src/components/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "seedDatabase.js"]
 }

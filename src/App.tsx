@@ -15,7 +15,7 @@ import { locale, defaultLocation } from "./components/utilities/util";
 import { DefaultLayout } from "./components/langGuard/langGuard";
 
 const HomePage = lazy(() => import("./pages/home/view/initalPage/index"));
-const SinglePage = lazy(() => import("./pages/home/view/singlePage"));
+// const SinglePage = lazy(() => import("./pages/home/view/singlePage"));
 
 const LangGuard: React.FC = () => {
   const params = useParams();
@@ -47,7 +47,8 @@ function App() {
               path="countries/:id"
               element={
                 <Suspense fallback={<div>Loading...</div>}>
-                  <SinglePage />
+                  {/* <SinglePage /> */}
+                  <div>s</div>
                 </Suspense>
               }
             />

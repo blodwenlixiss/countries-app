@@ -5,35 +5,45 @@ import CardInfo from "./card-components/card-info";
 import CardFlag from "./card-components/card-image";
 import CardSort from "./card-components/card-sort/cardSort";
 import CardCreate from "./card-components/card-create/cardCreate";
-import { country } from "../static/country-data";
 import { useEffect, useReducer } from "react";
 import { articleReducer } from "./card-reducer/reducer";
 import { CardDelete } from "./card-components/card-button/deletebtn/cardDelete";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Card: React.FC = () => {
   const params = useParams();
-  const lang = params.lang as keyof typeof country;
+  const lang = params.lang || "en";
+
   const initialState = {
     sortDirection: null,
-    cardArticle: [...country[lang]],
+    cardArticle: [],
   };
+
   const [state, dispatch] = useReducer(articleReducer, initialState);
 
   useEffect(() => {
-    dispatch({
-      type: "setArticles",
-      payload: { articles: [...country[lang]] },
-    });
+    const endpoint = `http://localhost:3000/countries`;
+    axios
+      .get(endpoint)
+      .then((res) => {
+        dispatch({
+          type: "setArticles",
+          payload: { articles: res.data[lang] },
+        });
+      })
+      .catch((error) => console.error("Error fetching countries:", error));
   }, [lang]);
 
   const handleLikeCount = (id: string) => {
+    const likedArticle = state.cardArticle.find((article) => article.id === id);
+    if (!likedArticle) return;
+
     dispatch({ type: "likes", payload: { id } });
   };
 
   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
-    console.log(selectedValue);
     dispatch({ type: "sort", payload: { selectedValue } });
   };
 
@@ -45,7 +55,25 @@ const Card: React.FC = () => {
     like: number;
     isDeleted: boolean;
   }) => {
-    dispatch({ type: "create", payload: { newArticleObj } });
+    axios
+      .post(`http://localhost:3000/countries`, newArticleObj)
+      .then((response) => {
+        console.log(response.data);
+        dispatch({
+          type: "create",
+          payload: {
+            newArticleObj: {
+              ...response.data[lang],
+              id: (Number(state.cardArticle.at(-1)?.id) + 1).toString(),
+              like: 0,
+              isDeleted: false,
+            },
+          },
+        });
+      })
+      .catch((error) => {
+        console.error("Error creating article:", error);
+      });
   };
 
   const handleDeleteArticle = (
@@ -53,8 +81,17 @@ const Card: React.FC = () => {
     id: string,
   ) => {
     e.preventDefault();
-    dispatch({ type: "delete", payload: { id } });
+
+    axios
+      .delete(`http://localhost:3000/countries`)
+      .then(() => {
+        dispatch({ type: "delete", payload: { id } });
+      })
+      .catch((error) => {
+        console.error("Error deleting article:", error);
+      });
   };
+
   const handleRecoverArticle = (id: string) => {
     dispatch({ type: "recover", payload: { id } });
   };
@@ -62,9 +99,16 @@ const Card: React.FC = () => {
   return (
     <div className={styles["card-container"]}>
       <CardSort onSort={handleSort} />
-      <div style={{ display: "flex", gap: " 40px", lineHeight: "1rem" }}>
+      <div style={{ display: "flex", gap: "40px", lineHeight: "1rem" }}>
         {state.cardArticle.map(
-          (artcile: {
+          ({
+            id,
+            isDeleted,
+            like,
+            title,
+            population,
+            flag,
+          }: {
             id: string;
             isDeleted: boolean;
             like: number;
@@ -73,38 +117,25 @@ const Card: React.FC = () => {
             flag: string;
           }) => (
             <div
-              key={artcile.id}
-              className={`${
-                !artcile.isDeleted ? styles.card : styles.isDeleted
-              }`}
+              key={id}
+              className={`${!isDeleted ? styles.card : styles.isDeleted}`}
             >
               <CardContent
                 renderButton={
-                  <CardButton
-                    onChange={() => handleLikeCount(artcile.id)}
-                    id={artcile.id}
-                  />
+                  <CardButton onChange={() => handleLikeCount(id)} id={id} />
                 }
               >
                 <CardInfo
-                  likeCount={artcile.like}
-                  countryTitle={artcile.title}
-                  population={artcile.population}
+                  likeCount={like}
+                  countryTitle={title}
+                  population={population}
                 />
-                <CardFlag flagSrc={artcile.flag} />
-                {!artcile.isDeleted ? (
-                  <CardDelete
-                    isDelete={false}
-                    onRecover={() => handleRecoverArticle(artcile.id)}
-                    onDelete={(e) => handleDeleteArticle(e, artcile.id)}
-                  />
-                ) : (
-                  <CardDelete
-                    isDelete={true}
-                    onRecover={() => handleRecoverArticle(artcile.id)}
-                    onDelete={(e) => handleDeleteArticle(e, artcile.id)}
-                  />
-                )}
+                <CardFlag flagSrc={flag} />
+                <CardDelete
+                  isDelete={isDeleted}
+                  onRecover={() => handleRecoverArticle(id)}
+                  onDelete={(e) => handleDeleteArticle(e, id)}
+                />
               </CardContent>
             </div>
           ),
@@ -114,5 +145,6 @@ const Card: React.FC = () => {
     </div>
   );
 };
+
 Card.displayName = "Card";
 export default Card;

@@ -5,15 +5,17 @@ import CardInfo from "./card-components/card-info";
 import CardFlag from "./card-components/card-image";
 import CardSort from "./card-components/card-sort/cardSort";
 import CardCreate from "./card-components/card-create/cardCreate";
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import { articleReducer } from "./card-reducer/reducer";
 import { CardDelete } from "./card-components/card-button/deletebtn/cardDelete";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getCoutnries, updateCountriesLike } from "@/api/countires";
 import axios from "axios";
 
 const Card: React.FC = () => {
-  const params = useParams();
-  const lang = params.lang || "en";
+  // const params = useParams();
+  // const lang = params.lang || "en";
 
   const initialState = {
     sortDirection: null,
@@ -22,32 +24,27 @@ const Card: React.FC = () => {
 
   const [state, dispatch] = useReducer(articleReducer, initialState);
 
-  useEffect(() => {
-    const endpoint = `http://localhost:3000/countries`;
-    axios
-      .get(endpoint)
-      .then((res) => {
-        dispatch({
-          type: "setArticles",
-          payload: { articles: res.data[lang] },
-        });
-      })
-      .catch((error) => console.error("Error fetching countries:", error));
-  }, [lang]);
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["countries-list"],
+    queryFn: getCoutnries,
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
 
-  const handleLikeCount = (id: string) => {
-    const likedArticle = state.cardArticle.find((article) => article.id === id);
-    if (!likedArticle) return;
+  // const handleLikeCount = (id: string) => {
+  //   const likedArticle = state.cardArticle.find((article) => article.id === id);
+  //   if (!likedArticle) return;
 
-    dispatch({ type: "likes", payload: { id } });
-  };
+  //   dispatch({ type: "likes", payload: { id } });
+  // };
+  const { mutate } = useMutation({ mutationFn: updateCountriesLike });
 
   const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     dispatch({ type: "sort", payload: { selectedValue } });
   };
 
-  const handleCreateArticle = (newArticleObj: {
+  const handleCreateArticle = async (newArticleObj: {
     title: string;
     population: string;
     flag: string;
@@ -55,41 +52,38 @@ const Card: React.FC = () => {
     like: number;
     isDeleted: boolean;
   }) => {
-    axios
-      .post(`http://localhost:3000/countries`, newArticleObj)
-      .then((response) => {
-        console.log(response.data);
-        dispatch({
-          type: "create",
-          payload: {
-            newArticleObj: {
-              ...response.data[lang],
-              id: (Number(state.cardArticle.at(-1)?.id) + 1).toString(),
-              like: 0,
-              isDeleted: false,
-            },
+    const response = await axios.post(
+      `http://localhost:3000/countries`,
+      newArticleObj,
+    );
+    try {
+      dispatch({
+        type: "create",
+        payload: {
+          newArticleObj: {
+            ...response.data,
+            id: (Number(state.cardArticle.at(-1)?.id) + 1).toString(),
+            like: 0,
+            isDeleted: false,
           },
-        });
-      })
-      .catch((error) => {
-        console.error("Error creating article:", error);
+        },
       });
+    } catch (error) {
+      console.error("Error creating article:", error);
+    }
   };
 
-  const handleDeleteArticle = (
+  const handleDeleteArticle = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: string,
   ) => {
     e.preventDefault();
-
-    axios
-      .delete(`http://localhost:3000/countries`)
-      .then(() => {
-        dispatch({ type: "delete", payload: { id } });
-      })
-      .catch((error) => {
-        console.error("Error deleting article:", error);
-      });
+    await axios.delete(`http://localhost:3000/countries/${id}`);
+    try {
+      dispatch({ type: "delete", payload: { id } });
+    } catch (error) {
+      console.error("Error deleting article:", error);
+    }
   };
 
   const handleRecoverArticle = (id: string) => {
@@ -98,21 +92,23 @@ const Card: React.FC = () => {
 
   return (
     <div className={styles["card-container"]}>
+      {isLoading ? "Loading..." : null}
+      {isError ? "Error" : null}
       <CardSort onSort={handleSort} />
       <div style={{ display: "flex", gap: "40px", lineHeight: "1rem" }}>
-        {state.cardArticle.map(
+        {data?.map(
           ({
             id,
             isDeleted,
             like,
-            title,
+            titleEn,
             population,
             flag,
           }: {
             id: string;
             isDeleted: boolean;
             like: number;
-            title: string;
+            titleEn: string;
             population: string;
             flag: string;
           }) => (
@@ -122,12 +118,24 @@ const Card: React.FC = () => {
             >
               <CardContent
                 renderButton={
-                  <CardButton onChange={() => handleLikeCount(id)} id={id} />
+                  <CardButton
+                    onChange={() => {
+                      mutate(
+                        { id: id, payload: { like: (like += 1) } },
+                        {
+                          onSuccess: () => {
+                            refetch();
+                          },
+                        },
+                      );
+                    }}
+                    id={""}
+                  />
                 }
               >
                 <CardInfo
                   likeCount={like}
-                  countryTitle={title}
+                  countryTitle={titleEn}
                   population={population}
                 />
                 <CardFlag flagSrc={flag} />

@@ -115,25 +115,13 @@ export const articleReducer = (
     }
 
     case "delete": {
-      const deletedCardArticle = state.cardArticle.find(
-        (article) => article.id === action.payload.id,
-      );
-
-      if (deletedCardArticle) {
-        deletedItemIndex[deletedCardArticle.title] =
-          parseInt(action.payload.id, 10) - 1;
-      }
-
-      const updatedArticles = state.cardArticle.filter(
-        (article) => article.id !== action.payload.id,
-      );
-
       return {
         ...state,
-        cardArticle: [
-          ...updatedArticles,
-          { ...deletedCardArticle, isDeleted: true } as CardArticleType,
-        ],
+        cardArticle: state.cardArticle.map((article) =>
+          article.id === action.payload.id
+            ? { ...article, isDeleted: true }
+            : article,
+        ),
       };
     }
 
